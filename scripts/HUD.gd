@@ -14,8 +14,7 @@ func _ready():
 
 	# Initialize HUD elements
 	if health_bar:
-		health_bar.max_value = PlayerStats.max_health
-		health_bar.value = PlayerStats.current_health
+		_on_health_changed(PlayerStats.current_health, PlayerStats.max_health)
 
 	if ammo_label:
 		ammo_label.text = "30 / 90" # Placeholder for shooting ammo as requested
@@ -55,6 +54,14 @@ func _on_health_changed(current: float, max_health: float):
 	if health_bar:
 		health_bar.max_value = max_health
 		health_bar.value = current
+		var fill_sb = health_bar.get_theme_stylebox("fill").duplicate() as StyleBoxFlat
+		if fill_sb:
+			var ratio = 0.0
+			if max_health > 0:
+				ratio = clamp(current / max_health, 0.0, 1.0)
+			# Interpolate color from Red (low health) to Green (high health)
+			fill_sb.bg_color = Color(0.9, 0.2, 0.2, 0.9).lerp(Color(0.2, 0.8, 0.2, 0.9), ratio)
+			health_bar.add_theme_stylebox_override("fill", fill_sb)
 
 func _on_resume_pressed():
 	toggle_pause()
