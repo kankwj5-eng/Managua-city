@@ -3,6 +3,7 @@ config_version=5
 [application]
 
 config/name="Managua City"
+run/main_scene="res://escenas/Main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
