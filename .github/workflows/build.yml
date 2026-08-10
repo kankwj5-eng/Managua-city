@@ -1,7 +1,8 @@
 name: Build Game (Android APK)
 
 # Este workflow compila automáticamente el juego en formato APK para Android usando Godot Engine 4.
-# Se ejecuta en cada push o pull request a las ramas principales.
+# Genera un APK SIN FIRMA, solo para pruebas locales. No apto para publicar en Google Play.
+
 on:
   push:
     branches:
@@ -16,9 +17,8 @@ on:
 jobs:
   build:
     name: Build for Android
-    runs-on: ubuntu-24.04 # Ubuntu 24.04 es recomendado para Godot 4.x
+    runs-on: ubuntu-24.04
     container:
-      # Usamos la imagen docker de barichello/godot-ci optimizada para Godot 4.3
       image: barichello/godot-ci:4.3
 
     steps:
@@ -30,47 +30,21 @@ jobs:
           lfs: true
 
       # 2. Configurar la estructura de carpetas de Godot en el contenedor Docker
-      # Esto mueve los templates de exportación integrados en la imagen a las rutas correctas del usuario.
       - name: Setup Godot Paths & Templates
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mkdir -v -p ~/.config/
           mv /root/.config/godot ~/.config/godot
           mv /root/.local/share/godot/export_templates/4.3.stable ~/.local/share/godot/export_templates/4.3.stable
-          # Solución alternativa para la ruta de Java SDK en la imagen Docker de barichello/godot-ci
-          echo 'export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"' >> ~/.config/godot/editor_settings-4.3.tres
+          echo 'export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"' >> ~/.config/godot/editor_settings-4.tres
 
-      # 3. Preparar la firma del Android Keystore usando GitHub Secrets
-      # Decodificamos el Keystore codificado en Base64 y configuramos las credenciales en export_presets.cfg.
-      - name: Prepare Android Keystore and Sign Config
-        env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: |
-          # Solo decodificamos y configuramos la firma si el secret ANDROID_KEYSTORE_BASE64 existe.
-          # De lo contrario, se advierte y se exportará sin firma para pruebas locales.
-          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
-            echo "Decodificando Keystore de Android..."
-            mkdir -p ~/.android
-            echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > /root/release.keystore
-
-            echo "Inyectando credenciales de Keystore en export_presets.cfg..."
-            sed -i 's|keystore/release=".*"|keystore/release="'/root/release.keystore'"|g' export_presets.cfg
-            sed -i 's|keystore/release_user=".*"|keystore/release_user="'"$ANDROID_KEY_ALIAS"'"|g' export_presets.cfg
-            sed -i 's|keystore/release_password=".*"|keystore/release_password="'"$ANDROID_KEY_PASSWORD"'"|g' export_presets.cfg
-          else
-            echo "ADVERTENCIA: ANDROID_KEYSTORE_BASE64 no está configurado. El APK se compilará sin firma o con firma de depuración por defecto."
-          fi
-
-      # 4. Crear carpeta de salida y exportar el APK en modo Release
-      - name: Build Android APK
+      # 3. Crear carpeta de salida y exportar el APK en modo debug (sin firma, para pruebas)
+      - name: Build Android APK (debug)
         run: |
           mkdir -v -p build/android
-          godot --headless --verbose --export-release "Android" "build/android/ManaguaCity.apk"
+          godot --headless --verbose --export-debug "Android" "build/android/ManaguaCity.apk"
 
-      # 5. Subir el APK generado como un artifact de GitHub Actions
+      # 4. Subir el APK generado como un artifact de GitHub Actions
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
