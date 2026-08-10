@@ -1,0 +1,281 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8xt3v86psla1"]
+
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/MinimapCamera.gd" id="2_mini"]
+[ext_resource type="Script" path="res://scripts/VirtualJoystick.gd" id="3_joys"]
+[ext_resource type="Script" path="res://scripts/TouchButton.gd" id="4_tbtn"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HealthBar" type="ProgressBar" parent="Control"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 320.0
+offset_bottom = 50.0
+value = 100.0
+
+[node name="HealthLabel" type="Label" parent="Control/HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "VIDA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AmmoLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -60.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "30 / 90"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MinimapContainer" type="SubViewportContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -170.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 170.0
+grow_horizontal = 0
+
+[node name="SubViewport" type="SubViewport" parent="Control/MinimapContainer"]
+handle_input_locally = false
+size = Vector2i(150, 150)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/MinimapContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
+script = ExtResource("2_mini")
+
+[node name="MobileControls" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseButton" type="Button" parent="Control/MobileControls"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = 20.0
+offset_right = 60.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 18
+text = "|| PAUSA"
+
+[node name="VirtualJoystick" type="Control" parent="Control/MobileControls"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -240.0
+offset_right = 240.0
+offset_bottom = -40.0
+grow_vertical = 0
+script = ExtResource("3_joys")
+
+[node name="Background" type="Panel" parent="Control/MobileControls/VirtualJoystick"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/MobileControls/VirtualJoystick/Background"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "MOVER"
+horizontal_alignment = 1
+
+[node name="Handle" type="Panel" parent="Control/MobileControls/VirtualJoystick"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 75.0
+offset_right = 125.0
+offset_bottom = 125.0
+
+[node name="JumpButton" type="Control" parent="Control/MobileControls"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -150.0
+offset_right = -140.0
+offset_bottom = -70.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_tbtn")
+action_name = "ui_accept"
+
+[node name="Panel" type="Panel" parent="Control/MobileControls/JumpButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/MobileControls/JumpButton/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SALTAR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShootButton" type="Control" parent="Control/MobileControls"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -150.0
+offset_right = -10.0
+offset_bottom = -70.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_tbtn")
+action_name = "shoot"
+
+[node name="Panel" type="Panel" parent="Control/MobileControls/ShootButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/MobileControls/ShootButton/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "DISPARAR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseMenu" type="Control" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundDim" type="ColorRect" parent="Control/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.490196)
+
+[node name="Panel" type="Panel" parent="Control/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/PauseMenu/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "JUEGO PAUSADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Control/PauseMenu/Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = -20.0
+offset_right = -40.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "Reanudar"
+
+[node name="QuitButton" type="Button" parent="Control/PauseMenu/Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -60.0
+offset_right = -40.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "Salir"
+
+[connection signal="pressed" from="Control/MobileControls/PauseButton" to="." method="toggle_pause"]
+[connection signal="pressed" from="Control/PauseMenu/Panel/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Control/PauseMenu/Panel/QuitButton" to="." method="_on_quit_pressed"]

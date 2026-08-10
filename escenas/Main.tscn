@@ -1,10 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://coqj4v86p8nha"]
+[gd_scene load_steps=7 format=3 uid="uid://coqj4v86p8nha"]
 
 [ext_resource type="PackedScene" uid="uid://cb5ayiaxlb7cl" path="res://assets/models/managua_ciudad.glb" id="1_city"]
 [ext_resource type="Script" path="res://scripts/LevelCollisionGenerator.gd" id="2_coll"]
 [ext_resource type="Script" path="res://scripts/Player.gd" id="3_play"]
 [ext_resource type="Script" path="res://scripts/SpringArm3D.gd" id="4_spring"]
 [ext_resource type="PackedScene" uid="uid://br6b8h8xsnlsa" path="res://assets/models/personaje_relieve.glb" id="5_char"]
+[ext_resource type="PackedScene" uid="uid://b8xt3v86psla1" path="res://escenas/HUD.tscn" id="6_hud"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.4
@@ -40,3 +41,5 @@ script = ExtResource("4_spring")
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 current = true
+
+[node name="HUD" parent="." instance=ExtResource("6_hud")]

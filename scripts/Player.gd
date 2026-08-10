@@ -20,15 +20,33 @@ var base_gravity = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8
 var animation_player: AnimationPlayer = null
 var animation_tree: AnimationTree = null
 
+# Ammo counter for shooting feedback
+var current_ammo: int = 30
+var max_ammo: int = 30
+var total_reserve: int = 90
+
 func _ready():
 	# Ensure correct collision layers/masks
-	# Player can be on layer 1, and mask layer 1 (world)
 	collision_layer = 1
 	collision_mask = 1
 
 	# Safely scan for AnimationPlayer or AnimationTree inside the visual_node
 	if visual_node:
 		_find_animations(visual_node)
+
+	# Dynamically register the "shoot" action if it does not exist
+	if not InputMap.has_action("shoot"):
+		InputMap.add_action("shoot")
+
+		# Map Left Mouse Button
+		var ev_mouse = InputEventMouseButton.new()
+		ev_mouse.button_index = MOUSE_BUTTON_LEFT
+		InputMap.action_add_event("shoot", ev_mouse)
+
+		# Map Control key
+		var ev_ctrl = InputEventKey.new()
+		ev_ctrl.keycode = KEY_CTRL
+		InputMap.action_add_event("shoot", ev_ctrl)
 
 func _find_animations(node: Node):
 	if node is AnimationPlayer:
@@ -44,7 +62,6 @@ func _physics_process(delta):
 		camera_pivot.global_position = global_position
 
 	# Add variable gravity.
-	# Add the gravity.
 	if not is_on_floor():
 		var current_gravity = base_gravity
 		if velocity.y < 0:
@@ -59,21 +76,39 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# We use basic WASD keys / Arrow keys mapping or generic ui_ actions.
-	var input_dir = Vector2.ZERO
-	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
-		input_dir.y -= 1.0
-	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
-		input_dir.y += 1.0
-	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
-		input_dir.x -= 1.0
-	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
-		input_dir.x += 1.0
+	# Handle shooting (triggered by touch button or left click / Ctrl)
+	if Input.is_action_just_pressed("shoot"):
+		_shoot_placeholder()
 
-	# Standard input normalization
-	if input_dir.length() > 0:
-		input_dir = input_dir.normalized()
+	# Handle debug keys for testing health system
+	if Input.is_key_pressed(KEY_K):
+		PlayerStats.take_damage(0.5) # Fast damage over time when holding K
+	if Input.is_key_pressed(KEY_H):
+		PlayerStats.heal(0.5) # Fast healing over time when holding H
+
+	# Fall-off protection/damage: if falling out of bounds
+	if global_position.y < -15.0:
+		PlayerStats.take_damage(100.0) # Insta-death on falling out of bounds
+
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir = Vector2.ZERO
+	if PlayerStats.touch_input_vector != Vector2.ZERO:
+		# Use mobile virtual joystick input
+		input_dir = PlayerStats.touch_input_vector
+	else:
+		# Use basic WASD keys / Arrow keys mapping
+		if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+			input_dir.y -= 1.0
+		if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+			input_dir.y += 1.0
+		if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+			input_dir.x -= 1.0
+		if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+			input_dir.x += 1.0
+
+		# Standard input normalization
+		if input_dir.length() > 0:
+			input_dir = input_dir.normalized()
 
 	# Rotate movement vector relative to camera rotation
 	var direction = Vector3.ZERO
@@ -107,9 +142,6 @@ func _physics_process(delta):
 
 # Safe update of animations depending on the state of movement
 func _update_animations():
-	# If there is an AnimationTree, we might set parameters. Let's provide standard state mapping for both
-	# We'll support idle, caminar (walk), correr (run), saltar (jump)
-	# Check horizontal speed
 	var speed_h = Vector2(velocity.x, velocity.z).length()
 	var state = "idle"
 
@@ -129,18 +161,14 @@ func _update_animations():
 			if animation_player.current_animation != state:
 				animation_player.play(state)
 		elif state == "correr" and animation_player.has_animation("caminar"):
-			# Fallback if correr doesn't exist but caminar does
 			if animation_player.current_animation != "caminar":
 				animation_player.play("caminar")
 		elif state == "saltar" and animation_player.has_animation("idle"):
-			# Fallback for jump
 			if animation_player.current_animation != "idle":
 				animation_player.play("idle")
 
 	# Safe set on AnimationTree if it exists
 	if animation_tree:
-		# Standard setups for AnimationTree: either a state machine or blend space
-		# We can set parameters like "parameters/playback" or state variables if they exist.
 		var playback = animation_tree.get("parameters/playback")
 		if playback and playback is AnimationNodeStateMachinePlayback:
 			if playback.has_node(state):
@@ -150,10 +178,23 @@ func _update_animations():
 			elif state == "saltar" and playback.has_node("idle"):
 				playback.travel("idle")
 		else:
-			# Set blend/state parameters if set up directly
 			animation_tree.set("parameters/state", state)
 			animation_tree.set("parameters/speed", speed_h)
 			animation_tree.set("parameters/is_on_floor", is_on_floor())
+
+# Shoot placeholder action
+func _shoot_placeholder():
+	if current_ammo > 0:
+		current_ammo -= 1
+		print("¡PUM! Disparo realizado. Munición: ", current_ammo, " / ", total_reserve)
+	else:
+		current_ammo = max_ammo
+		print("¡Recargando! Munición: ", current_ammo, " / ", total_reserve)
+
+	# Try to find HUD and update its ammo indicator label if it exists
+	var ammo_label = get_node_or_null("/root/Main/HUD/Control/AmmoLabel")
+	if ammo_label:
+		ammo_label.text = str(current_ammo) + " / " + str(total_reserve)
 
 # Also support basic touch dragging / mouse drag for look-around
 func _unhandled_input(event):
