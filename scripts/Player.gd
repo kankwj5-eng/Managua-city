@@ -44,6 +44,7 @@ func _physics_process(delta):
 		camera_pivot.global_position = global_position
 
 	# Add variable gravity.
+	# Add the gravity.
 	if not is_on_floor():
 		var current_gravity = base_gravity
 		if velocity.y < 0:

@@ -3,7 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://cb5ayiaxlb7cl" path="res://assets/models/managua_ciudad.glb" id="1_city"]
 [ext_resource type="Script" path="res://scripts/LevelCollisionGenerator.gd" id="2_coll"]
 [ext_resource type="Script" path="res://scripts/Player.gd" id="3_play"]
-[ext_resource type="PackedScene" uid="uid://br6b8h8xsnlsa" path="res://assets/models/personaje_relieve.glb" id="4_char"]
+[ext_resource type="Script" path="res://scripts/SpringArm3D.gd" id="4_spring"]
+[ext_resource type="PackedScene" uid="uid://br6b8h8xsnlsa" path="res://assets/models/personaje_relieve.glb" id="5_char"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.4
@@ -26,14 +27,15 @@ script = ExtResource("3_play")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_player")
 
-[node name="personaje_relieve" parent="Player" instance=ExtResource("4_char")]
+[node name="personaje_relieve" parent="Player" instance=ExtResource("5_char")]
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
-spring_length = 5.0
+spring_length = 2.8
+script = ExtResource("4_spring")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
