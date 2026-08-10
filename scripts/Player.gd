@@ -30,6 +30,9 @@ func _ready():
 	collision_layer = 1
 	collision_mask = 1
 
+	# Set priority so player physics processing runs before camera pivot / SpringArm3D
+	process_physics_priority = -10
+
 	# Safely scan for AnimationPlayer or AnimationTree inside the visual_node
 	if visual_node:
 		_find_animations(visual_node)
@@ -57,10 +60,6 @@ func _find_animations(node: Node):
 		_find_animations(child)
 
 func _physics_process(delta):
-	# Update CameraPivot position to follow the player
-	if camera_pivot:
-		camera_pivot.global_position = global_position
-
 	# Add variable gravity.
 	if not is_on_floor():
 		var current_gravity = base_gravity

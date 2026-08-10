@@ -14,7 +14,20 @@ func _ready():
 	spring_length = 2.8
 
 	if not target:
-		target = get_node_or_null("../../Player")
+		target = get_node_or_null("/root/Main/Player")
+		if not target:
+			target = get_node_or_null("../../Player")
+
+	# Explicitly exclude player from collision checks
+	if target:
+		add_excluded_object(target.get_rid())
+
+	# Ensure correct collision mask (detect environment/map, but exclude player layer)
+	# Default collision_mask is 1. If player is on layer 1, RID exclusion ensures the player is ignored.
+	collision_mask = 1
+
+	# Set process physics priority to 0 (which runs after the player's -10)
+	process_physics_priority = 0
 
 	# Initialize rotations based on current parent rotation
 	var parent = get_parent()
