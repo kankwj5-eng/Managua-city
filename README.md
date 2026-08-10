@@ -1,29 +1,52 @@
-# Juego 3D Managua
+# Managua City: El Camino de la Verdad
 
-Este proyecto es una base para un juego 3D desarrollado en Unity 2022 LTS, integrando un modelo 3D de la ciudad de Managua.
+Un juego de aventura y supervivencia ambientado en una Nicaragua sumida en el caos.
 
-## Contenido del Proyecto
+## Historia
 
-- **Assets/Models/managua_ciudad.glb**: El modelo 3D de la ciudad proporcionado.
-- **Assets/Scripts/PlayerController.cs**: Script de C# para el movimiento del personaje en tercera persona.
-- **Estructura de Carpetas**: Organizada según los estándares de Unity (Scenes, Prefabs, Materials, etc.).
+El caos comenzó sin aviso. Las comunicaciones cayeron, varias ciudades quedaron aisladas y extraños grupos comenzaron a aparecer por todo el país.
 
-## Instrucciones para Unity
+**Lenner**, nuestro protagonista, recibe una última comunicación de su hermana, una brillante científica que trabajaba en un proyecto secreto. Ella le dice:
+> “No confíes en nadie. Yo tengo las respuestas… pero si me encuentran, todo habrá terminado.”
 
-1. Clona este repositorio en tu máquina local.
-2. Abre **Unity Hub**.
-3. Haz clic en **Add** y selecciona la carpeta del proyecto `Managua-city`.
-4. Asegúrate de tener instalada la versión **Unity 2022.3 LTS**.
-5. Al abrir el proyecto, Unity generará automáticamente las carpetas `Library` y `Temp` necesarias.
-6. Configura tu escena de juego importando los modelos desde `Assets/Models`.
+Después, la comunicación se corta. Lenner descubre que su hermana posee los conocimientos necesarios para detener el caos y descubrir qué lo provocó realmente. El problema es que ha desaparecido y nadie sabe dónde está.
 
-## Configuración de Android
+Así comienza su viaje. Con su camisa de la selección de Nicaragua, pantalón largo y el equipo que consigue durante la aventura, Lenner tendrá que atravesar ciudades, carreteras, zonas rurales y lugares abandonados mientras intenta encontrar pistas sobre el paradero de su hermana.
 
-Según el prompt original:
-- **Build Settings**: Cambiar plataforma a Android.
-- **Player Settings**:
-  - Target API Level: Android 10 (API 29) o superior.
-  - Architecture: ARMv7 + ARM64.
+Pero el camino será cada vez más difícil. Los enemigos también la están buscando. Cada pista lo acerca a ella, pero también revela algo más inquietante: su hermana no desapareció por accidente. Alguien la está escondiendo porque conoce la verdad sobre el origen del caos.
+
+Y cuando Lenner finalmente descubre dónde podría estar... **la verdadera aventura apenas comienza.**
+
+## Personaje Principal: Lenner
+
+- **Atuendo**: Camisa de la selección de Nicaragua y pantalón largo.
+- **Misión**: Encontrar a su hermana científica y detener el origen del caos.
+- **Habilidades**: Exploración, recolección de equipo y combate táctico.
+
+## Estructura del Proyecto Unity
+
+- **Assets/Models/**:
+  - `managua_ciudad.glb`: Modelo 3D detallado de la ciudad.
+  - `personaje_relieve.glb`: Modelo 3D de Lenner.
+- **Assets/Scripts/**:
+  - `PlayerController.cs`: Control de movimiento en tercera persona.
+- **Assets/Scenes/**:
+  - `Gameplay.unity`: Escena principal configurada.
+
+## Configuración para Desarrolladores
+
+### 1. Compilación Automática (APK)
+Este repositorio está preparado para compilar automáticamente una APK de Android mediante **GitHub Actions**.
+
+**Requisito previo**: Debes configurar los siguientes `Secrets` en tu repositorio de GitHub (Settings > Secrets and variables > Actions):
+- `UNITY_LICENSE`: Tu licencia de Unity en formato XML.
+- `UNITY_EMAIL`: Tu correo de Unity.
+- `UNITY_PASSWORD`: Tu contraseña de Unity.
+
+### 2. Desarrollo Local
+1. Clona el repositorio.
+2. Abre el proyecto con **Unity 2022.3 LTS**.
+3. Asegúrate de que el modelo de Lenner tenga el componente `CharacterController` y el script `PlayerController.cs` asignado.
 
 ---
-*Proyecto generado automáticamente por Manus.*
+*Desarrollado con la asistencia de Manus AI.*
