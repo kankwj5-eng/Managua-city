@@ -56,7 +56,8 @@ jobs:
             mkdir -p ~/.android
             echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > /root/release.keystore
 
-            echo "Inyectando credenciales de Keystore en export_presets.cfg..."
+            echo "Inyectando credenciales de Keystore en export_presets.cfg y activando firma..."
+            sed -i 's|package/signed=false|package/signed=true|g' export_presets.cfg
             sed -i 's|keystore/release=".*"|keystore/release="'/root/release.keystore'"|g' export_presets.cfg
             sed -i 's|keystore/release_user=".*"|keystore/release_user="'"$ANDROID_KEY_ALIAS"'"|g' export_presets.cfg
             sed -i 's|keystore/release_password=".*"|keystore/release_password="'"$ANDROID_KEY_PASSWORD"'"|g' export_presets.cfg
