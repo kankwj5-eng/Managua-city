@@ -1,5 +1,7 @@
 name: Build Game (Android APK)
 
+# Este workflow compila automáticamente el juego en formato APK para Android usando Godot Engine 4.
+# Se ejecuta en cada push o pull request a las ramas principales.
 on:
   push:
     branches:
@@ -14,51 +16,63 @@ on:
 jobs:
   build:
     name: Build for Android
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # Ubuntu 24.04 es recomendado para Godot 4.x
+    container:
+      # Usamos la imagen docker de barichello/godot-ci optimizada para Godot 4.3
+      image: barichello/godot-ci:4.3
+
     steps:
-      # Checkout repository
+      # 1. Checkout del código del repositorio
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
 
-      # Cache Unity Library folder to speed up builds
-      - name: Cache Library
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-Android
-          restore-keys: |
-            Library-Android
-            Library-
+      # 2. Configurar la estructura de carpetas de Godot en el contenedor Docker
+      # Esto mueve los templates de exportación integrados en la imagen a las rutas correctas del usuario.
+      - name: Setup Godot Paths & Templates
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates/
+          mkdir -v -p ~/.config/
+          mv /root/.config/godot ~/.config/godot
+          mv /root/.local/share/godot/export_templates/4.3.stable ~/.local/share/godot/export_templates/4.3.stable
+          # Solución alternativa para la ruta de Java SDK en la imagen Docker de barichello/godot-ci
+          echo 'export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"' >> ~/.config/godot/editor_settings-4.3.tres
 
-      # Free up disk space for the build runner
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          tool-cache: true
-          android: false
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: false
-          swap: true
-
-      # Build Unity Project using GameCI
-      - name: Build Unity Project
-        uses: game-ci/unity-builder@v4
+      # 3. Preparar la firma del Android Keystore usando GitHub Secrets
+      # Decodificamos el Keystore codificado en Base64 y configuramos las credenciales en export_presets.cfg.
+      - name: Prepare Android Keystore and Sign Config
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: Android
-          androidExportType: androidPackage # Generates APK
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          # Solo decodificamos y configuramos la firma si el secret ANDROID_KEYSTORE_BASE64 existe.
+          # De lo contrario, se advierte y se exportará sin firma para pruebas locales.
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "Decodificando Keystore de Android..."
+            mkdir -p ~/.android
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > /root/release.keystore
 
-      # Upload the APK build as an artifact
+            echo "Inyectando credenciales de Keystore en export_presets.cfg..."
+            sed -i 's|keystore/release=".*"|keystore/release="'/root/release.keystore'"|g' export_presets.cfg
+            sed -i 's|keystore/release_user=".*"|keystore/release_user="'"$ANDROID_KEY_ALIAS"'"|g' export_presets.cfg
+            sed -i 's|keystore/release_password=".*"|keystore/release_password="'"$ANDROID_KEY_PASSWORD"'"|g' export_presets.cfg
+          else
+            echo "ADVERTENCIA: ANDROID_KEYSTORE_BASE64 no está configurado. El APK se compilará sin firma o con firma de depuración por defecto."
+          fi
+
+      # 4. Crear carpeta de salida y exportar el APK en modo Release
+      - name: Build Android APK
+        run: |
+          mkdir -v -p build/android
+          godot --headless --verbose --export-release "Android" "build/android/ManaguaCity.apk"
+
+      # 5. Subir el APK generado como un artifact de GitHub Actions
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ManaguaCity-Android-APK
-          path: build/Android
+          path: build/android/ManaguaCity.apk
