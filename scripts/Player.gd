@@ -17,10 +17,6 @@ func _ready():
 	collision_mask = 1
 
 func _physics_process(delta):
-	# Update CameraPivot position to follow the player
-	if camera_pivot:
-		camera_pivot.global_position = global_position
-
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -68,11 +64,3 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-# Also support basic touch dragging / mouse drag for look-around
-func _unhandled_input(event):
-	if event is InputEventScreenDrag or (event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-		if camera_pivot:
-			# Rotate camera pivot horizontally and vertically based on swipe/drag
-			camera_pivot.rotation.y -= event.relative.x * 0.005
-			camera_pivot.rotation.x -= event.relative.y * 0.005
-			camera_pivot.rotation.x = clamp(camera_pivot.rotation.x, -1.2, 0.5) # Clamp pitch to avoid flipping
