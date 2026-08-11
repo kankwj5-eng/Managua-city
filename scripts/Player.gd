@@ -1,10 +1,12 @@
 extends CharacterBody3D
 
 @export var SPEED = 5.0
+@export var SPRINT_SPEED = 8.5
 @export var ACCELERATION = 15.0
 @export var DECELERATION = 20.0
 @export var JUMP_VELOCITY = 6.0
 @export var ROTATION_SPEED = 10.0
+@export var enable_debug_health_keys = false
 
 # Gravity configurations for weightier jump
 @export var RISE_GRAVITY_MULTIPLIER = 1.0
@@ -24,6 +26,9 @@ var animation_tree: AnimationTree = null
 var current_ammo: int = 30
 var max_ammo: int = 30
 var total_reserve: int = 90
+var shoot_damage: float = 25.0
+var fire_cooldown := 0.18
+var fire_cooldown_remaining := 0.0
 
 func _ready():
 	# Ensure correct collision layers/masks
@@ -50,6 +55,21 @@ func _ready():
 		var ev_ctrl = InputEventKey.new()
 		ev_ctrl.keycode = KEY_CTRL
 		InputMap.action_add_event("shoot", ev_ctrl)
+	_ensure_action_key("interact", KEY_E)
+	_ensure_action_key("sprint", KEY_SHIFT)
+	_ensure_action_key("reload", KEY_R)
+
+func _ensure_action_key(action_name: String, keycode: Key) -> void:
+	if not InputMap.has_action(action_name):
+		InputMap.add_action(action_name)
+	var has_key := false
+	for event in InputMap.action_get_events(action_name):
+		if event is InputEventKey and event.keycode == keycode:
+			has_key = true
+	if not has_key:
+		var ev_key := InputEventKey.new()
+		ev_key.keycode = keycode
+		InputMap.action_add_event(action_name, ev_key)
 
 func _find_animations(node: Node):
 	if node is AnimationPlayer:
@@ -75,15 +95,20 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
+	fire_cooldown_remaining = max(fire_cooldown_remaining - delta, 0.0)
+
 	# Handle shooting (triggered by touch button or left click / Ctrl)
 	if Input.is_action_just_pressed("shoot"):
-		_shoot_placeholder()
+		_shoot()
+	if Input.is_action_just_pressed("reload"):
+		_reload()
 
-	# Handle debug keys for testing health system
-	if Input.is_key_pressed(KEY_K):
-		PlayerStats.take_damage(0.5) # Fast damage over time when holding K
-	if Input.is_key_pressed(KEY_H):
-		PlayerStats.heal(0.5) # Fast healing over time when holding H
+	# Optional debug keys for local health testing; disabled by default for normal gameplay.
+	if enable_debug_health_keys:
+		if Input.is_key_pressed(KEY_K):
+			PlayerStats.take_damage(0.5)
+		if Input.is_key_pressed(KEY_H):
+			PlayerStats.heal(0.5)
 
 	# Fall-off protection/damage: if falling out of bounds
 	if global_position.y < -15.0:
@@ -119,8 +144,9 @@ func _physics_process(delta):
 
 	# Smooth horizontal velocity using move_toward() with ACCELERATION and DECELERATION
 	if direction:
-		var target_velocity_x = direction.x * SPEED
-		var target_velocity_z = direction.z * SPEED
+		var active_speed = SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
+		var target_velocity_x = direction.x * active_speed
+		var target_velocity_z = direction.z * active_speed
 		velocity.x = move_toward(velocity.x, target_velocity_x, ACCELERATION * delta)
 		velocity.z = move_toward(velocity.z, target_velocity_z, ACCELERATION * delta)
 
@@ -181,19 +207,75 @@ func _update_animations():
 			animation_tree.set("parameters/speed", speed_h)
 			animation_tree.set("parameters/is_on_floor", is_on_floor())
 
-# Shoot placeholder action
-func _shoot_placeholder():
+# Shoot action with a simple forward ray, so patrols in the open world can be defeated.
+func _shoot():
+	if fire_cooldown_remaining > 0.0:
+		return
+	fire_cooldown_remaining = fire_cooldown
 	if current_ammo > 0:
 		current_ammo -= 1
 		print("¡PUM! Disparo realizado. Munición: ", current_ammo, " / ", total_reserve)
+		AudioManager.play_shoot()
+		_notify_world_about_shot()
+		_try_hit_target()
 	else:
-		current_ammo = max_ammo
-		print("¡Recargando! Munición: ", current_ammo, " / ", total_reserve)
+		_reload()
 
 	# Try to find HUD and update its ammo indicator label if it exists
 	var ammo_label = get_node_or_null("/root/Main/HUD/Control/AmmoLabel")
 	if ammo_label:
 		ammo_label.text = str(current_ammo) + " / " + str(total_reserve)
+
+func _reload() -> void:
+	if total_reserve <= 0 or current_ammo == max_ammo:
+		print("Sin munición de reserva.")
+		AudioManager.play_empty_weapon()
+		return
+	var needed := max_ammo - current_ammo
+	var loaded = min(needed, total_reserve)
+	current_ammo += loaded
+	total_reserve -= loaded
+	print("¡Recargando! Munición: ", current_ammo, " / ", total_reserve)
+	AudioManager.play_reload()
+
+func add_ammo(amount: int) -> void:
+	total_reserve += amount
+	var ammo_label = get_node_or_null("/root/Main/HUD/Control/AmmoLabel")
+	if ammo_label:
+		ammo_label.text = str(current_ammo) + " / " + str(total_reserve)
+
+func _notify_world_about_shot() -> void:
+	var director = get_node_or_null("/root/Main/OpenWorldDirector")
+	if director and director.has_method("notify_shot_fired"):
+		director.notify_shot_fired(global_position)
+
+func _try_hit_target() -> void:
+	var space_state := get_world_3d().direct_space_state
+	var aim_basis = camera_pivot.global_transform.basis if camera_pivot else global_transform.basis
+	var origin = global_position + Vector3.UP * 1.4
+	var end = origin + (-aim_basis.z * 35.0)
+	var query := PhysicsRayQueryParameters3D.create(origin, end)
+	query.exclude = [get_rid()]
+	var result := space_state.intersect_ray(query)
+	_spawn_hit_feedback(result.position if result else end)
+	if result and result.collider and result.collider.has_method("take_damage"):
+		result.collider.take_damage(shoot_damage)
+
+func _spawn_hit_feedback(position: Vector3) -> void:
+	var marker := MeshInstance3D.new()
+	marker.name = "ImpactFeedback"
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.12
+	sphere.height = 0.24
+	marker.mesh = sphere
+	marker.global_position = position
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(1.0, 0.65, 0.2, 0.9)
+	material.emission_enabled = true
+	material.emission = Color(1.0, 0.35, 0.05)
+	marker.material_override = material
+	get_tree().current_scene.add_child(marker)
+	get_tree().create_timer(0.18).timeout.connect(marker.queue_free)
 
 # Also support basic touch dragging / mouse drag for look-around
 func _unhandled_input(event):

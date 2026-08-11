@@ -24,6 +24,28 @@ Y cuando Lenner finalmente descubre dónde podría estar... **la verdadera avent
 - **Habilidades**: Exploración, recolección de equipo y combate táctico.
 - **Equipamiento**: Arma (pistola) y cuchillo.
 
+## Modo Mundo Abierto
+
+La escena principal usa directamente `assets/models/managua_ciudad.glb` como ciudad explorable y `assets/models/personaje_relieve.glb` como Lenner. Sobre esa base se agregaron sistemas de mundo abierto inspirados en juegos urbanos:
+
+- **Misiones de historia**: sigue balizas por Managua para reconstruir la última llamada, descubrir el rastro de Redane y ubicar el refugio donde podría estar la hermana de Lenner.
+- **Actividades libres**: recoge botiquines, munición e informes civiles repartidos por la ciudad.
+- **Nivel de amenaza Redane**: disparar aumenta la presión enemiga; las patrullas cercanas persiguen a Lenner.
+- **Combate y supervivencia**: la pistola puede dañar patrullas, hay munición limitada y el HUD muestra misión, pistas y amenaza.
+
+### Controles
+
+- **WASD / Flechas**: mover a Lenner.
+- **Mouse / arrastre táctil**: girar la cámara.
+- **Espacio**: saltar.
+- **Shift**: correr.
+- **Click izquierdo / Ctrl / botón táctil**: disparar.
+- **E**: interactuar con objetivos cercanos.
+
+### Desarrollo por etapas
+
+El desarrollo continuará en etapas pequeñas y comprobables para no romper la base jugable. Consulta `ROADMAP.md` para ver el orden recomendado: base estable, combate, navegación enemiga, ciudad viva, gráficos, audio real y misiones narrativas completas.
+
 ## Estructura del Proyecto Godot 4
 
 La estructura del proyecto sigue las convenciones recomendadas de organización para Godot 4:
@@ -61,3 +83,17 @@ Para que el APK se firme de forma segura para producción, debes configurar los 
 
 ---
 *Desarrollado con la asistencia de Manus AI.*
+
+
+## Avance integrado por etapas
+
+La segunda tanda de integración ya deja conectadas las etapas 2 a 6 en una primera versión jugable:
+
+- Controles formales en `project.godot`, incluyendo disparar, interactuar, correr y recargar manualmente.
+- Combate con cooldown de disparo y feedback visual temporal de impacto.
+- Patrullas Redane con `NavigationAgent3D`, gravedad y estados de patrulla, investigación, persecución, ataque y búsqueda.
+- Nivel de amenaza Redane con decaimiento gradual cuando el jugador consigue escapar.
+- Primeros props urbanos, faroles con luz, barricadas, carteles Redane y civiles placeholder para empezar a sentir la ciudad viva.
+- Buses de audio creados en runtime (`Music`, `SFX`, `UI`, `Ambient`) mientras se importan sonidos reales.
+
+Estas implementaciones siguen siendo prototipo, pero ya quedan integradas directamente en la rama actual para continuar encima de ellas.
