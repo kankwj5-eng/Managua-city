@@ -37,7 +37,7 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
 textures/vram_compression/import_etc2_astc=true
-environment/defaults/default_clear_color=Color(0.008, 0.013, 0.027, 1)
+environment/defaults/default_clear_color=Color(0.38, 0.62, 0.82, 1)
 
 [debug]
 

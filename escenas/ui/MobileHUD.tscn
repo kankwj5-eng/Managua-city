@@ -1,47 +1,58 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MobileHUD.gd" id="1_hud"]
 
 [sub_resource type="StyleBoxFlat" id="Style_panel"]
-bg_color = Color(0.025, 0.039, 0.075, 0.86)
+bg_color = Color(0.025, 0.07, 0.12, 0.92)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.12, 0.68, 0.82, 0.52)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 10.0
+border_color = Color(0.18, 0.72, 0.9, 0.72)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 16.0
+content_margin_top = 11.0
+content_margin_right = 16.0
+content_margin_bottom = 11.0
 
 [sub_resource type="StyleBoxFlat" id="Style_button"]
-bg_color = Color(0.10, 0.18, 0.28, 0.78)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.35, 0.80, 0.92, 0.55)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
+bg_color = Color(0.04, 0.16, 0.28, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.82, 0.98, 0.7)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [sub_resource type="StyleBoxFlat" id="Style_button_pressed"]
-bg_color = Color(0.15, 0.65, 0.78, 0.9)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
+bg_color = Color(0.08, 0.56, 0.72, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84, 0.97, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
-[sub_resource type="LabelSettings" id="Label_objective"]
+[sub_resource type="LabelSettings" id="Label_title"]
 font_size = 20
-font_color = Color(0.74, 0.95, 1, 1)
-outline_size = 4
-outline_color = Color(0.01, 0.015, 0.03, 0.9)
+font_color = Color(0.86, 0.97, 1, 1)
+outline_size = 5
+outline_color = Color(0.005, 0.015, 0.03, 0.95)
+
+[sub_resource type="LabelSettings" id="Label_body"]
+font_size = 16
+font_color = Color(0.93, 0.96, 0.98, 1)
+outline_size = 3
+outline_color = Color(0.005, 0.015, 0.03, 0.9)
 
 [node name="MobileHUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -49,30 +60,32 @@ script = ExtResource("1_hud")
 [node name="TopLeft" type="PanelContainer" parent="."]
 offset_left = 22.0
 offset_top = 22.0
-offset_right = 474.0
-offset_bottom = 112.0
+offset_right = 500.0
+offset_bottom = 126.0
 theme_override_styles/panel = SubResource("Style_panel")
 
 [node name="VBox" type="VBoxContainer" parent="TopLeft"]
 layout_mode = 2
+theme_override_constants/separation = 2
 
 [node name="ObjectiveTitle" type="Label" parent="TopLeft/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Objetivo"
-label_settings = SubResource("Label_objective")
+text = "La última llamada"
+label_settings = SubResource("Label_title")
 
 [node name="ObjectiveDetail" type="Label" parent="TopLeft/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Explorá Puerto del Sur"
+text = "Encontrá a La Chela en el Mercado Oriental."
 autowrap_mode = 2
+label_settings = SubResource("Label_body")
 
 [node name="TopRight" type="VBoxContainer" parent="."]
-offset_left = 1070.0
-offset_top = 26.0
-offset_right = 1254.0
-offset_bottom = 102.0
+offset_left = 1000.0
+offset_top = 24.0
+offset_right = 1258.0
+offset_bottom = 112.0
 theme_override_constants/separation = 4
 
 [node name="MoneyLabel" type="Label" parent="TopRight"]
@@ -80,24 +93,21 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "C$ 0"
 horizontal_alignment = 2
-label_settings = SubResource("Label_objective")
+label_settings = SubResource("Label_title")
 
-[node name="SpeedLabel" type="Label" parent="TopRight"]
+[node name="StatusLabel" type="Label" parent="TopRight"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "A PIE"
 horizontal_alignment = 2
-label_settings = SubResource("Label_objective")
+label_settings = SubResource("Label_title")
 
 [node name="ToastPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 360.0
-offset_top = 622.0
-offset_right = -360.0
-offset_bottom = 688.0
-grow_horizontal = 2
+offset_left = 330.0
+offset_top = 132.0
+offset_right = 950.0
+offset_bottom = 194.0
 theme_override_styles/panel = SubResource("Style_panel")
 
 [node name="ToastLabel" type="Label" parent="ToastPanel"]
@@ -107,10 +117,46 @@ text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+label_settings = SubResource("Label_body")
 
 [node name="ToastTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 one_shot = true
+
+[node name="DialoguePanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+offset_left = 110.0
+offset_top = 440.0
+offset_right = 1170.0
+offset_bottom = 660.0
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="DialogueBox" type="VBoxContainer" parent="DialoguePanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DialogueSpeaker" type="Label" parent="DialoguePanel/DialogueBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "La Chela"
+label_settings = SubResource("Label_title")
+
+[node name="DialogueText" type="Label" parent="DialoguePanel/DialogueBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = ""
+autowrap_mode = 2
+label_settings = SubResource("Label_body")
+
+[node name="NextDialogueButton" type="Button" parent="DialoguePanel/DialogueBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "CONTINUAR"
 
 [node name="TouchControls" type="Control" parent="."]
 layout_mode = 3
@@ -119,14 +165,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
+mouse_filter = 1
 
 [node name="LeftButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 36.0
-offset_top = 598.0
-offset_right = 114.0
-offset_bottom = 676.0
+anchors_preset = 15
+anchor_left = 0.035
+anchor_top = 0.78
+anchor_right = 0.14
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("Style_button")
@@ -135,10 +186,15 @@ text = "◀"
 
 [node name="RightButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 202.0
-offset_top = 598.0
-offset_right = 280.0
-offset_bottom = 676.0
+anchors_preset = 15
+anchor_left = 0.155
+anchor_top = 0.78
+anchor_right = 0.26
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("Style_button")
@@ -147,10 +203,15 @@ text = "▶"
 
 [node name="ForwardButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 120.0
-offset_top = 512.0
-offset_right = 198.0
-offset_bottom = 590.0
+anchors_preset = 15
+anchor_left = 0.095
+anchor_top = 0.64
+anchor_right = 0.20
+anchor_bottom = 0.77
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("Style_button")
@@ -159,10 +220,15 @@ text = "▲"
 
 [node name="BackButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 120.0
-offset_top = 598.0
-offset_right = 198.0
-offset_bottom = 676.0
+anchors_preset = 15
+anchor_left = 0.095
+anchor_top = 0.78
+anchor_right = 0.20
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("Style_button")
@@ -171,39 +237,71 @@ text = "▼"
 
 [node name="InteractButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 1054.0
-offset_top = 586.0
-offset_right = 1234.0
-offset_bottom = 676.0
+anchors_preset = 15
+anchor_left = 0.78
+anchor_top = 0.78
+anchor_right = 0.94
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 17
 theme_override_styles/normal = SubResource("Style_button")
 theme_override_styles/pressed = SubResource("Style_button_pressed")
 text = "USAR"
 
+[node name="ActionButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_left = 0.94
+anchor_top = 0.78
+anchor_right = 0.99
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "ACCIÓN"
+
 [node name="JumpButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 950.0
-offset_top = 598.0
-offset_right = 1032.0
-offset_bottom = 676.0
+anchors_preset = 15
+anchor_left = 0.68
+anchor_top = 0.78
+anchor_right = 0.77
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("Style_button")
 theme_override_styles/pressed = SubResource("Style_button_pressed")
 text = "SALTA"
 
 [node name="ExitButton" type="Button" parent="TouchControls"]
 unique_name_in_owner = true
-offset_left = 950.0
-offset_top = 598.0
-offset_right = 1032.0
-offset_bottom = 676.0
+anchors_preset = 15
+anchor_left = 0.68
+anchor_top = 0.78
+anchor_right = 0.77
+anchor_bottom = 0.91
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("Style_button")
 theme_override_styles/pressed = SubResource("Style_button_pressed")
-text = "BAJA"
+text = "BAJAR"
 visible = false
 
 [connection signal="timeout" from="ToastTimer" to="." method="_on_toast_timer_timeout"]
