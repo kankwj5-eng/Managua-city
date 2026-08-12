@@ -1,19 +1,64 @@
-name: Build Android APK
-on: [push]
+name: Build Android Debug APK
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-debug-apk:
+    name: Export Godot Android Debug APK
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.3
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Build APK
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          targetPlatform: Android
-      - uses: actions/upload-artifact@v4
+          fetch-depth: 0
+          lfs: true
+
+      - name: Configure Godot export templates
+        shell: bash
+        run: |
+          mkdir -p \~/.local/share/godot/export_templates \~/.config
+          if [ -d /root/.config/godot ]; then
+            cp -R /root/.config/godot \~/.config/
+          fi
+          if [ -d /root/.local/share/godot/export_templates/4.3.stable ]; then
+            cp -R /root/.local/share/godot/export_templates/4.3.stable \~/.local/share/godot/export_templates/
+          fi
+          echo 'export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"' >> \~/.config/godot/editor_settings-4.tres
+
+      - name: Create temporary debug signing key
+        shell: bash
+        run: |
+          keytool -genkeypair -v \
+            -keystore /tmp/managua-debug.keystore \
+            -storepass android \
+            -keypass android \
+            -alias androiddebugkey \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Managua City Debug, OU=Development, O=Managua City, L=Managua, ST=Managua, C=NI"
+
+      - name: Export signed debug APK
+        shell: bash
+        run: |
+          mkdir -p build/android
+          godot --headless --verbose --export-debug "Android" "build/android/ManaguaCity-debug.apk"
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
         with:
-          name: Managua-City-APK
-          path: build/Android/
+          name: ManaguaCity-debug-APK
+          path: build/android/ManaguaCity-debug.apk
+          if-no-files-found: error
+          retention-days: 14
