@@ -1,52 +1,19 @@
-name: Build Game (Android APK)
-
-# Este workflow compila automáticamente el juego en formato APK para Android usando Godot Engine 4.
-# Genera un APK SIN FIRMA, solo para pruebas locales. No apto para publicar en Google Play.
-
-on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
-  workflow_dispatch:
-
+name: Build Android APK
+on: [push]
 jobs:
   build:
-    name: Build for Android
-    runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
-
+    runs-on: ubuntu-latest
     steps:
-      # 1. Checkout del código del repositorio
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Build APK
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          fetch-depth: 0
-          lfs: true
-
-      # 2. Configurar la estructura de carpetas de Godot en el contenedor Docker
-      - name: Setup Godot Paths & Templates
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mkdir -v -p ~/.config/
-          mv /root/.config/godot ~/.config/godot
-          mv /root/.local/share/godot/export_templates/4.3.stable ~/.local/share/godot/export_templates/4.3.stable
-          echo 'export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"' >> ~/.config/godot/editor_settings-4.tres
-
-      # 3. Crear carpeta de salida y exportar el APK en modo debug (sin firma, para pruebas)
-      - name: Build Android APK (debug)
-        run: |
-          mkdir -v -p build/android
-          godot --headless --verbose --export-debug "Android" "build/android/ManaguaCity.apk"
-
-      # 4. Subir el APK generado como un artifact de GitHub Actions
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
+          targetPlatform: Android
+      - uses: actions/upload-artifact@v4
         with:
-          name: ManaguaCity-Android-APK
-          path: build/android/ManaguaCity.apk
+          name: Managua-City-APK
+          path: build/Android/
