@@ -44,7 +44,7 @@ mesh = SubResource("CylinderMesh_head")
 material_override = SubResource("Material_player")
 
 [node name="LennerModel" parent="Visual" instance=ExtResource("3_lenner")]
-position = Vector3(0, 0.02, 0)
+position = Vector3(0, 1.0, 0)
 scale = Vector3(1.15, 1.15, 1.15)
 
 [node name="CameraPivot" type="Node3D" parent="."]
