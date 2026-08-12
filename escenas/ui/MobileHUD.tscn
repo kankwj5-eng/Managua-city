@@ -1,0 +1,209 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/MobileHUD.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+bg_color = Color(0.025, 0.039, 0.075, 0.86)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.12, 0.68, 0.82, 0.52)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="Style_button"]
+bg_color = Color(0.10, 0.18, 0.28, 0.78)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.80, 0.92, 0.55)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="Style_button_pressed"]
+bg_color = Color(0.15, 0.65, 0.78, 0.9)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="LabelSettings" id="Label_objective"]
+font_size = 20
+font_color = Color(0.74, 0.95, 1, 1)
+outline_size = 4
+outline_color = Color(0.01, 0.015, 0.03, 0.9)
+
+[node name="MobileHUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="TopLeft" type="PanelContainer" parent="."]
+offset_left = 22.0
+offset_top = 22.0
+offset_right = 474.0
+offset_bottom = 112.0
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="VBox" type="VBoxContainer" parent="TopLeft"]
+layout_mode = 2
+
+[node name="ObjectiveTitle" type="Label" parent="TopLeft/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Objetivo"
+label_settings = SubResource("Label_objective")
+
+[node name="ObjectiveDetail" type="Label" parent="TopLeft/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Explorá Puerto del Sur"
+autowrap_mode = 2
+
+[node name="TopRight" type="VBoxContainer" parent="."]
+offset_left = 1070.0
+offset_top = 26.0
+offset_right = 1254.0
+offset_bottom = 102.0
+theme_override_constants/separation = 4
+
+[node name="MoneyLabel" type="Label" parent="TopRight"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "C$ 0"
+horizontal_alignment = 2
+label_settings = SubResource("Label_objective")
+
+[node name="SpeedLabel" type="Label" parent="TopRight"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "A PIE"
+horizontal_alignment = 2
+label_settings = SubResource("Label_objective")
+
+[node name="ToastPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 360.0
+offset_top = 622.0
+offset_right = -360.0
+offset_bottom = 688.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="ToastLabel" type="Label" parent="ToastPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ToastTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
+
+[node name="TouchControls" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LeftButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 598.0
+offset_right = 114.0
+offset_bottom = 676.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "◀"
+
+[node name="RightButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 202.0
+offset_top = 598.0
+offset_right = 280.0
+offset_bottom = 676.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "▶"
+
+[node name="ForwardButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 120.0
+offset_top = 512.0
+offset_right = 198.0
+offset_bottom = 590.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "▲"
+
+[node name="BackButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 120.0
+offset_top = 598.0
+offset_right = 198.0
+offset_bottom = 676.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "▼"
+
+[node name="InteractButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 1054.0
+offset_top = 586.0
+offset_right = 1234.0
+offset_bottom = 676.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "USAR"
+
+[node name="JumpButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 950.0
+offset_top = 598.0
+offset_right = 1032.0
+offset_bottom = 676.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "SALTA"
+
+[node name="ExitButton" type="Button" parent="TouchControls"]
+unique_name_in_owner = true
+offset_left = 950.0
+offset_top = 598.0
+offset_right = 1032.0
+offset_bottom = 676.0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Style_button")
+theme_override_styles/pressed = SubResource("Style_button_pressed")
+text = "BAJA"
+visible = false
+
+[connection signal="timeout" from="ToastTimer" to="." method="_on_toast_timer_timeout"]

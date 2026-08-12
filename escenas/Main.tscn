@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/DistrictBuilder.gd" id="1_world"]
+[ext_resource type="PackedScene" path="res://escenas/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://escenas/Vehicles/Sedan.tscn" id="3_sedan"]
+[ext_resource type="PackedScene" path="res://escenas/ui/MobileHUD.tscn" id="4_hud"]
+[ext_resource type="Script" path="res://scripts/core/Main.gd" id="5_main"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.006, 0.012, 0.045, 1)
+sky_horizon_color = Color(0.07, 0.08, 0.18, 1)
+ground_bottom_color = Color(0.004, 0.008, 0.016, 1)
+ground_horizon_color = Color(0.08, 0.05, 0.1, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.17, 0.24, 0.38, 1)
+ambient_light_energy = 0.45
+tonemap_mode = 2
+tonemap_exposure = 0.85
+glow_enabled = true
+glow_intensity = 0.7
+glow_strength = 0.55
+fog_enabled = true
+fog_light_color = Color(0.07, 0.11, 0.2, 1)
+fog_light_energy = 0.65
+fog_density = 0.008
+fog_sky_affect = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Material_moon"]
+albedo_color = Color(0.66, 0.84, 1, 1)
+emission_enabled = true
+emission = Color(0.18, 0.34, 0.6, 1)
+emission_energy_multiplier = 2.5
+
+[node name="Main" type="Node3D"]
+script = ExtResource("5_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-58, -36, 0)
+light_color = Color(0.55, 0.67, 1, 1)
+light_energy = 0.9
+shadow_enabled = true
+directional_shadow_max_distance = 70.0
+
+[node name="District" type="Node3D" parent="."]
+script = ExtResource("1_world")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector3(-5, 0.1, 5)
+
+[node name="Sedan" parent="." instance=ExtResource("3_sedan")]
+position = Vector3(4, 1.0, 3)
+
+[node name="MobileHUD" parent="." instance=ExtResource("4_hud")]
