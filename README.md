@@ -14,7 +14,7 @@
 | Atmósfera | Día tropical, cielo abierto, luz solar, vegetación, costa, mercado y audio ambiental |
 | Acción | Pistola de prueba, destello, nivel de alerta y patrullas policiales |
 | NPCs | Ciudadanos y policías low-poly con nombres, oficios y diálogos interactivos |
-| Recursos 3D | Geometría procedural ligera, vehículo Kenney CC0 y sonidos originales WAV |
+| Recursos 3D | Geometría procedural ligera, distrito CityGML convertido, vehículo Kenney CC0 y sonidos originales WAV |
 
 ## Identidad y límites creativos
 
@@ -50,6 +50,8 @@ El vehículo procede de **Kenney Car Kit 3.1**, publicado con licencia **CC0**. 
 
 El icono de la aplicación es una obra visual original generada para este proyecto. La geometría del distrito, scripts, misión, UI y los efectos de audio WAV de la vertical son contenidos propios de este repositorio. La guía geográfica y cultural usada para diseñar las zonas está en [`docs/MANAGUA_REFERENCE.md`](docs/MANAGUA_REFERENCE.md).
 
+Como escenario urbano adicional se incluye `assets/models/citygml/diekirch_bastendorf_reference.glb`, una conversión ligera del archivo CityGML oficial de Diekirch/Bastendorf, Luxemburgo. La fuente declara licencia **CC0**; el archivo convertido se usa como distrito urbano invitado y no se presenta como un mapa real de Managua. La descarga, checksum, formato y fuente están documentados en [`docs/CITYGML_CATALOG_REVIEW.md`](docs/CITYGML_CATALOG_REVIEW.md).
+
 ## Estructura
 
 ```text
@@ -60,7 +62,7 @@ scripts/vehicles/         Física arcade del sedán
 scripts/missions/         Máquina de estados de la misión inicial
 scripts/world/            Distrito diurno, ciudadanos y policía
 assets/audio/             Ambiente, olas y efectos de jugabilidad
-assets/models/            Vehículo y recursos con manifiesto de licencia
+assets/models/            Vehículo, distrito CityGML y recursos con manifiestos de licencia
 .github/workflows/        Compilación de APK mediante GitHub Actions
 ```
 

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://escenas/ui/MobileHUD.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://scripts/core/Main.gd" id="5_main"]
 [ext_resource type="Script" path="res://scripts/world/NpcDirector.gd" id="6_npcs"]
+[ext_resource type="PackedScene" path="res://assets/models/citygml/diekirch_bastendorf_reference.glb" id="7_citygml"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial_Day"]
 sky_top_color = Color(0.08, 0.34, 0.78, 1)
@@ -48,6 +49,10 @@ directional_shadow_max_distance = 120.0
 
 [node name="District" type="Node3D" parent="."]
 script = ExtResource("1_world")
+
+[node name="CityGMLReferenceDistrict" parent="." instance=ExtResource("7_citygml")]
+position = Vector3(-58, 0.02, 35)
+scale = Vector3(0.035, 0.035, 0.035)
 
 [node name="NpcDirector" type="Node3D" parent="."]
 script = ExtResource("6_npcs")
