@@ -10,6 +10,9 @@ on:
 permissions:
   contents: read
 
+env:
+  GODOT_VERSION: "4.3"
+
 jobs:
   build-debug-apk:
     name: Export Godot Android Debug APK
@@ -24,21 +27,48 @@ jobs:
           fetch-depth: 0
           lfs: true
 
-      - name: Configure Godot export templates
+      - name: Move export templates into place
         shell: bash
         run: |
-          mkdir -p \~/.local/share/godot/export_templates \~/.config
-          if [ -d /root/.config/godot ]; then
-            cp -R /root/.config/godot \~/.config/
+          set -euo pipefail
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+
+          SRC="/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          DEST="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+          if [ -d "$SRC" ] && [ "$SRC" != "$DEST" ]; then
+            mv "$SRC" "$DEST"
+            echo "Templates movidos a $DEST"
+          elif [ -d "$DEST" ]; then
+            echo "Templates ya estaban en $DEST"
+          else
+            echo "ERROR: no se encontraron export templates en $SRC ni en $DEST"
+            find / -maxdepth 6 -type d -iname "*.stable*" 2>/dev/null | grep export_templates || true
+            exit 1
           fi
-          if [ -d /root/.local/share/godot/export_templates/4.3.stable ]; then
-            cp -R /root/.local/share/godot/export_templates/4.3.stable \~/.local/share/godot/export_templates/
-          fi
-          echo 'export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"' >> \~/.config/godot/editor_settings-4.tres
+
+          ls -la "$DEST"
+
+      - name: Configure Java SDK path in editor settings
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.config/godot"
+          JAVA_HOME_PATH="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
+          echo "Java detectado en: $JAVA_HOME_PATH"
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/java_sdk_path = "${JAVA_HOME_PATH}"
+          export/android/android_sdk_path = "${ANDROID_SDK_ROOT:-/usr/lib/android-sdk}"
+          EOF
+          cat "$HOME/.config/godot/editor_settings-4.tres"
 
       - name: Create temporary debug signing key
         shell: bash
         run: |
+          set -euo pipefail
           keytool -genkeypair -v \
             -keystore /tmp/managua-debug.keystore \
             -storepass android \
@@ -49,9 +79,16 @@ jobs:
             -validity 10000 \
             -dname "CN=Managua City Debug, OU=Development, O=Managua City, L=Managua, ST=Managua, C=NI"
 
+      - name: Import project (generates .godot cache, surfaces script errors early)
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --verbose --import
+
       - name: Export signed debug APK
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p build/android
           godot --headless --verbose --export-debug "Android" "build/android/ManaguaCity-debug.apk"
 
