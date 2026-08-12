@@ -41,3 +41,11 @@ Estado observado: la descarga de `kenney_car-kit.zip` se inició desde la fuente
 Se incorporaron cuatro GLB ligeros del paquete verificado: `sedan.glb`, `box.glb`, `cone.glb` y `wheel-dark.glb`. Cada archivo conserva el manifiesto de uso, licencia y hash SHA-256 en `assets/models/third_party/kenney_car_kit/MANIFEST.md`.
 
 El intento de obtener una biblioteca adicional de sonidos desde un repositorio externo no pudo completarse por una incidencia temporal de resolución de red. Para no incorporar archivos cuya procedencia no se haya revisado, la vertical slice utilizará inicialmente **sintetizadores de audio propios** para motor, ambiente y confirmaciones de interfaz. La estructura deja preparada la carpeta `assets/audio/` para futuras sustituciones por sonidos con licencia explícita.
+
+## Recursos incorporados en la expansión de NPCs
+
+- `assets/models/npcs/quaternius/`: modelos `Superhero_Male_FullBody.gltf` y `Superhero_Female_FullBody.gltf`, más sus binarios y texturas. Fuente: [Universal Base Characters de Quaternius](https://quaternius.com/packs/universalbasecharacters.html) / [descarga oficial en itch.io](https://quaternius.itch.io/universal-base-characters). Licencia declarada: **CC0**.
+- `assets/models/player/lenner.glb`: modelo proporcionado por el usuario para el protagonista Lenner.
+- `assets/models/city/managua_ciudad.glb`: modelo proporcionado por el usuario para el relieve/escenario de Managua.
+
+El código de `scripts/world/NpcDirector.gd` instancia los dos modelos de Quaternius y añade nombres, roles y una animación idle ligera. La integración mantiene `License_Standard.txt` junto a los modelos de Quaternius.

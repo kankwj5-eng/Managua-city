@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/DistrictBuilder.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://escenas/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://escenas/Vehicles/Sedan.tscn" id="3_sedan"]
 [ext_resource type="PackedScene" path="res://escenas/ui/MobileHUD.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://scripts/core/Main.gd" id="5_main"]
+[ext_resource type="PackedScene" path="res://assets/models/city/managua_ciudad.glb" id="6_city"]
+[ext_resource type="Script" path="res://scripts/world/NpcDirector.gd" id="7_npcs"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
 sky_top_color = Color(0.006, 0.012, 0.045, 1)
@@ -53,6 +55,14 @@ directional_shadow_max_distance = 70.0
 
 [node name="District" type="Node3D" parent="."]
 script = ExtResource("1_world")
+
+[node name="NpcDirector" type="Node3D" parent="."]
+script = ExtResource("7_npcs")
+
+[node name="ManaguaRelief" parent="." instance=ExtResource("6_city")]
+position = Vector3(39, 0.02, -35)
+rotation_degrees = Vector3(0, 180, 0)
+scale = Vector3(18, 18, 18)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector3(-5, 0.1, 5)
