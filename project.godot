@@ -1,0 +1,44 @@
+; Engine configuration file.
+; Ciudad del Lago — vertical slice original para Android.
+; Edit with Godot 4.
+
+config_version=5
+
+[application]
+config/name="Ciudad del Lago"
+run/main_scene="res://escenas/Main.tscn"
+config/features=PackedStringArray("4.3", "Mobile")
+config/icon="res://assets/app_icon.svg"
+
+[autoload]
+GameState="*res://scripts/core/GameState.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/handheld/orientation=1
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
+[physics]
+
+3d/default_gravity=18.0
+3d/default_gravity_vector=Vector3(0, -1, 0)
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.008, 0.013, 0.027, 1)
+
+[debug]
+
+gdscript/warnings/integer_division=0

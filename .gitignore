@@ -1,0 +1,24 @@
+# Godot 4
+.godot/
+.import/
+*.tmp
+*.translation
+
+# Builds
+build/
+exports/
+*.apk
+*.aab
+
+# Android / IDE
+.android/
+.gradle/
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local notes
+*.log
