@@ -1,0 +1,153 @@
+# Blender 4.0.2 MTL File: 'esteli_city.blend'
+# www.blender.org
+
+newmtl Mat_Asphalt
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/asphalt_albedo.png
+map_Ns /app/esteli_project/Textures/asphalt_roughness.png
+
+newmtl Mat_Blue_Paint
+Ns 422.499969
+Ka 1.000000 1.000000 1.000000
+Kd 0.120000 0.300000 0.700000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Mat_Car_Red
+Ns 722.500000
+Ka 0.700000 0.700000 0.700000
+Kd 0.800000 0.050000 0.050000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Mat_Car_White
+Ns 722.500000
+Ka 0.600000 0.600000 0.600000
+Kd 0.920000 0.920000 0.940000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Mat_Cathedral_Stucco
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/cathedral_stucco.png
+
+newmtl Mat_Cigar_Sign
+Ns 490.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.100000 0.080000 0.050000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/cigar_sign.png
+
+newmtl Mat_Concrete
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/concrete_albedo.png
+map_Ns /app/esteli_project/Textures/concrete_roughness.png
+map_Bump -bm 1.000000 /app/esteli_project/Textures/concrete_normal.png
+
+newmtl Mat_Foliage
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Kd 0.080000 0.380000 0.080000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Mat_Glass
+Ns 846.400024
+Ka 1.000000 1.000000 1.000000
+Kd 0.850000 0.950000 1.000000
+Ks 0.900000 0.900000 0.900000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Mat_Gold
+Ns 640.000000
+Ka 0.950000 0.950000 0.950000
+Kd 0.920000 0.760000 0.200000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Mat_Metal_Dark
+Ns 422.499969
+Ka 0.850000 0.850000 0.850000
+Kd 0.120000 0.120000 0.150000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Mat_Park_Pavers
+Ns 122.500015
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/park_pavers.png
+
+newmtl Mat_Red_Paint
+Ns 422.499969
+Ka 1.000000 1.000000 1.000000
+Kd 0.750000 0.120000 0.100000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Mat_RoofTiles
+Ns 90.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/rooftile_albedo.png
+
+newmtl Mat_Wood
+Ns 202.500000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd /app/esteli_project/Textures/wood_albedo.png
