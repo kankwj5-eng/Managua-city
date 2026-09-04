@@ -1,0 +1,133 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/city/managua_city.glb" id="1_city"]
+[ext_resource type="PackedScene" path="res://assets/npc/npc.glb" id="2_npc"]
+[ext_resource type="Script" path="res://capture.gd" id="3_capture"]
+[ext_resource type="PackedScene" path="res://assets/npc/npc_02.glb" id="4_npc2"]
+[ext_resource type="PackedScene" path="res://assets/npc/npc_03.glb" id="5_npc3"]
+[ext_resource type="Script" path="res://scripts/city_population.gd" id="6_population"]
+[ext_resource type="Shader" path="res://shaders/ai_denoiser.gdshader" id="7_denoiser"]
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="8_player"]
+[ext_resource type="Script" path="res://scripts/touch_controls.gd" id="9_touch"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.16, 0.32, 0.62, 1)
+sky_horizon_color = Color(0.9, 0.62, 0.42, 1)
+ground_bottom_color = Color(0.06, 0.08, 0.12, 1)
+ground_horizon_color = Color(0.5, 0.33, 0.25, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.7, 0.76, 0.9, 1)
+ambient_light_energy = 0.65
+tonemap_mode = 2
+tonemap_exposure = 1.1
+
+[sub_resource type="StandardMaterial3D" id="MarkerMaterial"]
+albedo_color = Color(0.1, 0.8, 0.95, 0.9)
+emission_enabled = true
+emission = Color(0.02, 0.35, 0.8, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="ShaderMaterial" id="DenoiserMaterial"]
+shader = ExtResource("7_denoiser")
+shader_parameter/denoise_strength = 0.32
+shader_parameter/sharpen_strength = 0.06
+
+[node name="ManaguaCity" type="Node3D"]
+script = ExtResource("3_capture")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -28, 0)
+light_color = Color(1, 0.82, 0.65, 1)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_max_distance = 80.0
+
+[node name="City" parent="." instance=ExtResource("1_city")]
+
+[node name="NPC" parent="." instance=ExtResource("2_npc")]
+position = Vector3(0, 0.2, 0)
+script = ExtResource("8_player")
+
+[node name="NPC_02" parent="." instance=ExtResource("4_npc2")]
+position = Vector3(24, 0.2, 18)
+
+[node name="NPC_03" parent="." instance=ExtResource("5_npc3")]
+position = Vector3(-24, 0.2, 18)
+
+[node name="CityPopulation" type="Node" parent="."]
+script = ExtResource("6_population")
+copies_per_neighborhood = 4
+
+[node name="AIDenoiser" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="PostProcess" type="ColorRect" parent="AIDenoiser"]
+material = SubResource("DenoiserMaterial")
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+
+[node name="SpawnMarker" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, 0)
+mesh = null
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(700, 500, 900)
+current = true
+fov = 65.0
+
+[node name="DirectionLightNote" type="Node" parent="."]
+metadata/_optimization = "Mobile renderer baseline: baked lighting target, limited dynamic shadows, LOD/occlusion/instancing to be applied after scale audit."
+
+[node name="TouchControls" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("9_touch")
+
+[node name="Up" type="Button" parent="TouchControls"]
+offset_left = 110.0
+offset_top = 500.0
+offset_right = 190.0
+offset_bottom = 580.0
+text = "▲"
+toggle_mode = true
+
+[node name="Down" type="Button" parent="TouchControls"]
+offset_left = 110.0
+offset_top = 600.0
+offset_right = 190.0
+offset_bottom = 680.0
+text = "▼"
+toggle_mode = true
+
+[node name="Left" type="Button" parent="TouchControls"]
+offset_left = 20.0
+offset_top = 550.0
+offset_right = 100.0
+offset_bottom = 630.0
+text = "◀"
+toggle_mode = true
+
+[node name="Right" type="Button" parent="TouchControls"]
+offset_left = 200.0
+offset_top = 550.0
+offset_right = 280.0
+offset_bottom = 630.0
+text = "▶"
+toggle_mode = true

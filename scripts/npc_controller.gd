@@ -1,0 +1,44 @@
+class_name NPCController
+extends Node3D
+
+## Control procedural para modelos sin esqueleto: reposo, caminar, correr y pelea.
+@export_enum("idle", "walk", "run", "fight") var state := "idle"
+@export var is_main_character := false
+@export var character_id := 0
+var _time := 0.0
+var _base_position := Vector3.ZERO
+var _base_scale := Vector3.ONE
+
+func _ready() -> void:
+    var target := get_parent() if get_parent() is Node3D else self
+    _base_position = target.position
+    _base_scale = target.scale
+
+func _process(delta: float) -> void:
+    _time += delta
+    var speed := 1.0
+    var stride := 0.025
+    match state:
+        "walk":
+            speed = 3.0
+            stride = 0.07
+        "run":
+            speed = 7.0
+            stride = 0.12
+        "fight":
+            speed = 8.0
+            stride = 0.04
+    var wave := sin(_time * speed)
+    var target := get_parent() if get_parent() is Node3D else self
+    target.position = _base_position + Vector3(0.0, abs(wave) * stride, 0.0)
+    target.rotation.y = sin(_time * speed * 0.5) * (0.035 if state != "fight" else 0.12)
+    if state == "fight":
+        target.rotation.x = sin(_time * speed) * 0.035
+    else:
+        target.rotation.x = 0.0
+    var pulse: float = 1.0 + (abs(wave) * 0.015 if is_main_character else 0.0)
+    target.scale = _base_scale * pulse
+
+func set_state(next_state: String) -> void:
+    if next_state in ["idle", "walk", "run", "fight"]:
+        state = next_state

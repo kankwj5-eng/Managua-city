@@ -1,0 +1,8 @@
+.godot/
+*.import
+build/
+*.apk
+*.aab
+managua_city_scene.png
+.DS_Store
+Thumbs.db
