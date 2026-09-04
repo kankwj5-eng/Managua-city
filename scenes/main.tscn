@@ -9,6 +9,7 @@
 [ext_resource type="Shader" path="res://shaders/ai_denoiser.gdshader" id="7_denoiser"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="8_player"]
 [ext_resource type="Script" path="res://scripts/touch_controls.gd" id="9_touch"]
+[ext_resource type="Script" path="res://scripts/dialogue_ai.gd" id="10_dialogue"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
 sky_top_color = Color(0.16, 0.32, 0.62, 1)
@@ -58,16 +59,22 @@ directional_shadow_max_distance = 80.0
 [node name="NPC" parent="." instance=ExtResource("2_npc")]
 position = Vector3(0, 0.2, 0)
 script = ExtResource("8_player")
+groups = ["characters"]
 
 [node name="NPC_02" parent="." instance=ExtResource("4_npc2")]
 position = Vector3(24, 0.2, 18)
+groups = ["characters"]
 
 [node name="NPC_03" parent="." instance=ExtResource("5_npc3")]
 position = Vector3(-24, 0.2, 18)
+groups = ["characters"]
 
 [node name="CityPopulation" type="Node" parent="."]
 script = ExtResource("6_population")
 copies_per_neighborhood = 4
+
+[node name="WorldUpgrades" type="Node3D" parent="."]
+script = ExtResource("10_dialogue")
 
 [node name="AIDenoiser" type="CanvasLayer" parent="."]
 layer = 20

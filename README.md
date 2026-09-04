@@ -31,3 +31,17 @@ En PC se puede mover el personaje principal con **WASD** o las flechas. En Andro
 ## Exportación Android
 
 Para crear la APK en un equipo con Godot, instala las plantillas de exportación Android y configura el Android SDK/JDK desde `Editor > Editor Settings > Export > Android`. Luego crea un preset Android y ejecuta `Project > Export Project > Android`. La escena ya está preparada para recibir ese preset.
+
+## Pase de producción visual
+
+Los tres modelos NPC miden aproximadamente un metro en sus archivos originales. Se normalizaron a una escala de **1.75 metros**, aplicada al personaje principal, NPCs iniciales y copias de los barrios, para que su proporción sea más natural frente a la ciudad.
+
+Se retiró el hospital por indicación del diseño. Se conservaron acentos de vegetación ligeros, con geometría económica y materiales verdes/marrones, pensados para reemplazarse posteriormente por un atlas de vegetación de mayor calidad.
+
+## Animación y esqueletos
+
+Los tres GLB recibidos contienen una sola malla, cero huesos y cero animaciones. El proyecto conserva el controlador procedural de reposo, caminar, correr y pelea, pero los movimientos reales de brazos y piernas requieren una versión riggeada de cada personaje. Cuando se disponga de esos archivos se podrá usar `SkeletonProfileHumanoid`, `AnimationTree` y retargeting de Godot.
+
+## IA en el juego
+
+`DialogueAI` define la interfaz de diálogo y mantiene respuestas locales para que la APK funcione sin conexión. Puede conectarse a un backend seguro mediante `endpoint`; no se guardan claves de API dentro del juego. El denoiser adaptativo y el escalado de resolución son los pases de reconstrucción visual apropiados para móvil; una red neuronal cuadro por cuadro pesada no se activa porque dañaría el rendimiento de gama baja.
