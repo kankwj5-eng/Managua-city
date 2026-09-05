@@ -14,3 +14,7 @@ func _process(_delta: float) -> void:
 
 func get_direction() -> Vector2:
     return _direction.normalized() if _direction.length() > 1.0 else _direction
+
+func is_sprinting() -> bool:
+    var sprint := get_node_or_null("Sprint") as Button
+    return sprint != null and sprint.button_pressed
