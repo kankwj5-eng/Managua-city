@@ -18,8 +18,3 @@ func _process(delta: float) -> void:
         position += direction * move_speed * delta
         _angle = lerp_angle(_angle, atan2(direction.x, direction.z), delta * 8.0)
         rotation.y = _angle
-    var camera := get_node_or_null("../Camera3D") as Camera3D
-    if camera:
-        var desired := position + Vector3(18.0, 12.0, 22.0)
-        camera.position = camera.position.lerp(desired, delta * 4.0)
-        camera.look_at(position + Vector3(0.0, 3.0, 0.0), Vector3.UP)

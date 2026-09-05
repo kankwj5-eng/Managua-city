@@ -45,3 +45,7 @@ Los tres GLB recibidos contienen una sola malla, cero huesos y cero animaciones.
 ## IA en el juego
 
 `DialogueAI` define la interfaz de diálogo y mantiene respuestas locales para que la APK funcione sin conexión. Puede conectarse a un backend seguro mediante `endpoint`; no se guardan claves de API dentro del juego. El denoiser adaptativo y el escalado de resolución son los pases de reconstrucción visual apropiados para móvil; una red neuronal cuadro por cuadro pesada no se activa porque dañaría el rendimiento de gama baja.
+
+## Cámara y escala humana
+
+Los NPCs y el personaje se normalizan a **1.80 m**. La cámara orbital sigue al personaje, permite girar horizontalmente 360° sin límite y mirar arriba/abajo entre -55° y +35°. En PC se controla arrastrando con el botón izquierdo del mouse; en Android se utiliza el gesto de arrastre sobre la pantalla.

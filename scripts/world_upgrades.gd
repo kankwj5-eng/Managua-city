@@ -1,7 +1,7 @@
 extends Node3D
 
 ## Mejoras ligeras y escalables para la ciudad móvil.
-const NPC_SCALE := 1.75
+const NPC_SCALE := 1.80
 const HOSPITAL_POSITION := Vector3(55.0, 0.0, 34.0)
 
 func _ready() -> void:

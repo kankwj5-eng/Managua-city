@@ -24,7 +24,7 @@ func _spawn_neighborhoods() -> void:
             var character_index := (barrio_index + copy_index) % 3
             var actor := character_scenes[character_index].instantiate() as Node3D
             actor.name = "NPC_%s_%02d" % [neighborhoods[barrio_index], copy_index + 1]
-            actor.scale = Vector3.ONE * 1.75
+            actor.scale = Vector3.ONE * 1.80
             actor.position = center + Vector3(float((copy_index % 2) * 12 - 6), 0.0, float((copy_index / 2) * 12 - 6))
             barrio.add_child(actor)
             _configure_actor(actor, character_index, false)
@@ -47,7 +47,7 @@ func select_character(character_index: int) -> void:
             controller.is_main_character = false
     var selected := character_scenes[character_index].instantiate() as Node3D
     selected.name = "PersonajePrincipal"
-    selected.scale = Vector3.ONE * 1.75
+    selected.scale = Vector3.ONE * 1.80
     selected.position = Vector3(0, 0.2, 0)
     add_child(selected)
     _configure_actor(selected, character_index, true)

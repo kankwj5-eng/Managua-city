@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/city/managua_city.glb" id="1_city"]
 [ext_resource type="PackedScene" path="res://assets/npc/npc.glb" id="2_npc"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="8_player"]
 [ext_resource type="Script" path="res://scripts/touch_controls.gd" id="9_touch"]
 [ext_resource type="Script" path="res://scripts/dialogue_ai.gd" id="10_dialogue"]
+[ext_resource type="Script" path="res://scripts/camera_orbit.gd" id="11_camera"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
 sky_top_color = Color(0.16, 0.32, 0.62, 1)
@@ -93,6 +94,10 @@ mesh = null
 position = Vector3(700, 500, 900)
 current = true
 fov = 65.0
+script = ExtResource("11_camera")
+target_path = NodePath("../NPC")
+distance = 9.0
+height = 4.2
 
 [node name="DirectionLightNote" type="Node" parent="."]
 metadata/_optimization = "Mobile renderer baseline: baked lighting target, limited dynamic shadows, LOD/occlusion/instancing to be applied after scale audit."
