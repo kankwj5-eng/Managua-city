@@ -28,6 +28,8 @@ func _spawn_neighborhoods() -> void:
             actor.position = center + Vector3(float((copy_index % 2) * 12 - 6), 0.0, float((copy_index / 2) * 12 - 6))
             barrio.add_child(actor)
             _configure_actor(actor, character_index, false)
+            var perception := preload("res://scripts/npc_perception.gd").new()
+            actor.add_child(perception)
             characters.append(actor)
 
 func _configure_actor(actor: Node3D, character_index: int, main_character: bool) -> void:

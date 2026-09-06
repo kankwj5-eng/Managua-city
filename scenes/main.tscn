@@ -60,7 +60,7 @@ directional_shadow_max_distance = 80.0
 [node name="NPC" parent="." instance=ExtResource("2_npc")]
 position = Vector3(0, 0.2, 0)
 script = ExtResource("8_player")
-groups = ["characters"]
+groups = ["characters", "player"]
 
 [node name="NPC_02" parent="." instance=ExtResource("4_npc2")]
 position = Vector3(24, 0.2, 18)
