@@ -49,3 +49,7 @@ Los tres GLB recibidos contienen una sola malla, cero huesos y cero animaciones.
 ## Cámara y escala humana
 
 Los NPCs y el personaje se normalizan a **1.80 m**. La cámara orbital sigue al personaje, permite girar horizontalmente 360° sin límite y mirar arriba/abajo entre -55° y +35°. En PC se controla arrastrando con el botón izquierdo del mouse; en Android se utiliza el gesto de arrastre sobre la pantalla.
+
+## NPCs riggeados con Blender
+
+Blender 4.0 fue instalado y se generaron copias riggeadas en `assets/npc/rigged/`. Cada personaje tiene una armadura humanoide de 18 huesos —raíz, pelvis, columna, cuello, cabeza, brazos, antebrazos, manos, muslos, espinillas y pies— con skinning automático. La escena y el sistema de barrios ya usan estas copias; los GLB originales se conservan intactos.

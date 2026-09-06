@@ -1,10 +1,10 @@
 [gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/city/managua_city.glb" id="1_city"]
-[ext_resource type="PackedScene" path="res://assets/npc/npc.glb" id="2_npc"]
+[ext_resource type="PackedScene" path="res://assets/npc/rigged/npc_rigged.glb" id="2_npc"]
 [ext_resource type="Script" path="res://capture.gd" id="3_capture"]
-[ext_resource type="PackedScene" path="res://assets/npc/npc_02.glb" id="4_npc2"]
-[ext_resource type="PackedScene" path="res://assets/npc/npc_03.glb" id="5_npc3"]
+[ext_resource type="PackedScene" path="res://assets/npc/rigged/npc_02_rigged.glb" id="4_npc2"]
+[ext_resource type="PackedScene" path="res://assets/npc/rigged/npc_03_rigged.glb" id="5_npc3"]
 [ext_resource type="Script" path="res://scripts/city_population.gd" id="6_population"]
 [ext_resource type="Shader" path="res://shaders/ai_denoiser.gdshader" id="7_denoiser"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="8_player"]

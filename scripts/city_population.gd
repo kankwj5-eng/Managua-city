@@ -5,9 +5,9 @@ extends Node
 @export var copies_per_neighborhood := 4
 @export var neighborhoods := ["Centro", "Playa", "Mercado"]
 var character_scenes := [
-    preload("res://assets/npc/npc.glb"),
-    preload("res://assets/npc/npc_02.glb"),
-    preload("res://assets/npc/npc_03.glb")
+    preload("res://assets/npc/rigged/npc_rigged.glb"),
+    preload("res://assets/npc/rigged/npc_02_rigged.glb"),
+    preload("res://assets/npc/rigged/npc_03_rigged.glb")
 ]
 var characters: Array[Node3D] = []
 
